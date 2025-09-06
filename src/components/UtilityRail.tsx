@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Palette, FileText, Zap, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { FileText, Zap, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 export function UtilityRail() {
   const [workingContext, setWorkingContext] = useState("");
@@ -34,49 +34,13 @@ export function UtilityRail() {
 
   return (
     <div className="p-4 space-y-6 h-full">
-      {/* Color Picker */}
-      <Card className="bg-gradient-card border-border shadow-elevation">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center space-x-2 text-sm">
-            <Palette className="h-4 w-4 text-primary" />
-            <span>Theme Accent</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex space-x-2 mb-3">
-            {["hsl(217 91% 60%)", "hsl(259 94% 51%)", "hsl(142 76% 36%)", "hsl(38 92% 50%)", "hsl(0 72% 51%)"].map((color, i) => (
-              <button
-                key={i}
-                className="w-6 h-6 rounded-full border-2 border-border hover:scale-110 transition-transform"
-                style={{ backgroundColor: color }}
-                onClick={() => {
-                  document.documentElement.style.setProperty('--accent', color.match(/\d+\s+\d+%\s+\d+%/)?.[0] || '');
-                }}
-              />
-            ))}
-          </div>
-          <input
-            type="color"
-            className="w-full h-8 rounded border border-border bg-transparent cursor-pointer"
-            onChange={(e) => {
-              const hex = e.target.value;
-              const r = parseInt(hex.slice(1, 3), 16);
-              const g = parseInt(hex.slice(3, 5), 16);
-              const b = parseInt(hex.slice(5, 7), 16);
-              const hsl = `${Math.round(Math.atan2(Math.sqrt(3) * (g - b), 2 * r - g - b) * 180 / Math.PI + 360) % 360} ${Math.round((Math.max(r, g, b) - Math.min(r, g, b)) / Math.max(r, g, b) * 100)}% ${Math.round((Math.max(r, g, b) + Math.min(r, g, b)) / 2 / 255 * 100)}%`;
-              document.documentElement.style.setProperty('--accent', hsl);
-            }}
-          />
-        </CardContent>
-      </Card>
-
-      {/* Working Context */}
+      {/* Current Priority */}
       <Card className="bg-gradient-card border-border shadow-elevation">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center justify-between text-sm">
             <span className="flex items-center space-x-2">
               <FileText className="h-4 w-4 text-primary" />
-              <span>Working Context</span>
+              <span>Current Priority</span>
             </span>
             <Badge variant="secondary" className="text-xs">
               {contextCount}
@@ -85,7 +49,7 @@ export function UtilityRail() {
         </CardHeader>
         <CardContent className="space-y-3">
           <Textarea
-            placeholder="Add notes about current work context..."
+            placeholder="Add notes about current priority items..."
             value={workingContext}
             onChange={(e) => setWorkingContext(e.target.value)}
             className="min-h-[80px] resize-none"
