@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, AlertTriangle, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Clock, AlertTriangle, Info, FileText } from "lucide-react";
 
 interface Notification {
   id: string;
@@ -73,6 +76,19 @@ const priorityConfig = {
 };
 
 export function NotificationsView() {
+  const [workingContext, setWorkingContext] = useState("");
+  const [contextCount, setContextCount] = useState(0);
+
+  const handleSetContext = () => {
+    setContextCount(workingContext.length);
+    // In a real app, this would save to localStorage or send to a server
+  };
+
+  const handleClearContext = () => {
+    setWorkingContext("");
+    setContextCount(0);
+  };
+
   const groupedNotifications = {
     urgent: mockNotifications.filter((n) => n.priority === "urgent"),
     medium: mockNotifications.filter((n) => n.priority === "medium"),
@@ -81,6 +97,37 @@ export function NotificationsView() {
 
   return (
     <div className="space-y-6">
+      {/* Current Priority Section */}
+      <Card className="bg-gradient-card border-border shadow-elevation">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center justify-between text-sm">
+            <span className="flex items-center space-x-2">
+              <FileText className="h-4 w-4 text-primary" />
+              <span>Current Priority</span>
+            </span>
+            <Badge variant="secondary" className="text-xs">
+              {contextCount}
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Textarea
+            placeholder="Add notes about current priority items..."
+            value={workingContext}
+            onChange={(e) => setWorkingContext(e.target.value)}
+            className="min-h-[80px] resize-none"
+          />
+          <div className="flex space-x-2">
+            <Button size="sm" variant="outline" onClick={handleSetContext} className="flex-1">
+              Set
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleClearContext}>
+              Clear
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Notifications</h1>
         <p className="text-muted-foreground">Manage and respond to system notifications</p>
